@@ -1,13 +1,33 @@
 package com.promineotech.movieApi.entity;
 
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+
+
+
+@Entity
 public class Customer {
 	
 	private Long customerId; 
 	private String hash; //password 
 	private String username; 
 	private String email;
+	
+	private Screening screening; 
+	
+	private Set<Seat> seats; 
 		
 		
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getCustomerId() {
 		return customerId;
 	}
@@ -24,6 +44,7 @@ public class Customer {
 			this.hash = hash;
 		}
 	
+	@Column(unique = true)
 	public String getUsername() {
 			return username;
 		}
@@ -40,10 +61,25 @@ public class Customer {
 			this.email = email;
 		}
 
-	
+	@ManyToOne
+	@JoinColumn(name = "screeningId")
+	public Screening getScreening() {
+		return screening;
+	}
 
-	
-	
+	@ManyToMany(mappedBy = "customer")
+	public void setScreening(Screening screening) {
+		this.screening = screening;
+	}
+
+	public Set<Seat> getSeats() {
+		return seats;
+	}
+
+	public void setSeats(Set<Seat> seats) {
+		this.seats = seats;
+	}
+
 	
 	}
 
