@@ -7,6 +7,6 @@ import com.promineotech.movieApi.entity.Customer;
 
 public interface CustomerRepository extends JpaRepository <Customer, Long> {
 	
-	public Customer findByUserName(String username); 
+	public Customer findByEmail(String email); 
 
 }

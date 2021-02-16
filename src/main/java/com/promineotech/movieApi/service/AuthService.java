@@ -17,11 +17,10 @@ public class AuthService {
 	@Autowired
 	private CustomerRepository customerRepo; 
 	
-	public Customer register(Credentials cred, String email) throws AuthenticationException {
+	public Customer register(Credentials cred) throws AuthenticationException {
 		Customer customer = new Customer(); 
-		customer.setUsername(cred.getUsername());
+		customer.setEmail(cred.getEmail()); 
 		customer.setHash(BCrypt.hashpw(cred.getPassword(), BCrypt.gensalt()));
-		customer.setEmail(email); 
 		try {
 			customerRepo.save(customer); 
 			return customer;
@@ -32,7 +31,7 @@ public class AuthService {
 	}
 	
 	public Customer login (Credentials cred) throws AuthenticationException {
-		Customer foundCustomer = customerRepo.findByUserName(cred.getUsername()); 
+		Customer foundCustomer = customerRepo.findByEmail(cred.getEmail());  
 		if (foundCustomer != null && BCrypt.checkpw(cred.getPassword(), foundCustomer.getHash())) {
 			return foundCustomer; 
 		}

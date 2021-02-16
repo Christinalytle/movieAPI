@@ -2,10 +2,12 @@ package com.promineotech.movieApi.entity;
 
 import java.util.Set;
 
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+@Entity
 public class Reservation {
 	
 	private Long reservationId; 

@@ -12,6 +12,15 @@ public class MovieService {
 	@Autowired 
 	private MovieRepository repo; 
 	
+	public Movie getMovieById (Long id) throws Exception {
+		try {
+			return repo.findById(id).orElseThrow(); 
+		} catch (Exception e) {
+			//logger 
+			throw e; 
+		}
+	}
+	
 	public Movie createMovie (Movie movie) {
 		return repo.save(movie); 	
 	}
@@ -32,7 +41,7 @@ public class MovieService {
 		}
 	}
 	
-	public void removeMovie(Long id) throws Exception {
+	public void deleteMovie(Long id) throws Exception {
 		try {
 			repo.deleteById(id);
 		} catch (Exception e) {
