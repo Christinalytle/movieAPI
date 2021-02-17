@@ -64,7 +64,7 @@ public class Seat {
 	
 	@ManyToMany (cascade = CascadeType.ALL)
 	@JoinTable (name = "seats_reserved",
-				joinColumns = @JoinColumn(name = "seatId", referencedColumnName="productId"), 
+				joinColumns = @JoinColumn(name = "seatId", referencedColumnName="seatId"), 
 				inverseJoinColumns = @JoinColumn(name = "reservationId", referencedColumnName ="reservationId"))
 	public Set<Reservation> getReservations() {
 		return reservations;

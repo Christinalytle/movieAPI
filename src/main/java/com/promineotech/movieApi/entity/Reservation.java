@@ -3,6 +3,9 @@ package com.promineotech.movieApi.entity;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -12,11 +15,13 @@ public class Reservation {
 	
 	private Long reservationId; 
 	private Customer customer; 
-	private Screening screening; 
+	private Screening screenings; 
 	private Set<Seat> seats;
 	private double reservationAmount; 
 	
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getReservationId() {
 		return reservationId;
 	}
@@ -27,13 +32,13 @@ public class Reservation {
 	@ManyToOne
 	@JoinColumn (name = "screeningId")
 	public Screening getScreening() {
-		return screening;
+		return screenings;
 	}
-	public void setScreening(Screening screening) {
-		this.screening = screening;
+	public void setScreening(Screening screenings) {
+		this.screenings = screenings;
 	}
 	
-	@ManyToMany(mappedBy = "reservation")
+	@ManyToMany(mappedBy = "seats")
 	public Set<Seat> getSeats() {
 		return seats;
 	}

@@ -20,7 +20,7 @@ public class Auditorium {
 	private Set<Seat> seats; 
 	
 	@JsonIgnore
-	private Screening screengings; 
+	private Set<Screening> screenings;  
 	
 	
 	@Id
@@ -51,12 +51,12 @@ public class Auditorium {
 	}
 
 	@OneToMany (mappedBy = "auditorium")
-	public Screening getScreengings() {
-		return screengings;
+	public Set<Screening> getScreenings() {
+		return screenings;
 	}
 
-	public void setScreengings(Screening screengings) {
-		this.screengings = screengings;
+	public void setScreengings(Set<Screening> screenings) {
+		this.screenings = screenings;
 	}
 	
 	

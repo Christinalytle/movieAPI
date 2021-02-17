@@ -1,9 +1,17 @@
 package com.promineotech.movieApi.entity;
 
+
+
+
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Id; 
+import javax.persistence.GeneratedValue; 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,9 +24,10 @@ public class Screening {
 	private String time; 
 	
 	@JsonIgnore
-	private Reservation reservation; 
+	private Set<Reservation> reservation; 
 	
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getScreeningId() {
 		return screeningId;
 	}
@@ -31,6 +40,7 @@ public class Screening {
 	public Movie getMovie() {
 		return movie;
 	}
+	
 	public void setMovie(Movie movie) {
 		this.movie = movie;
 	}
@@ -40,6 +50,7 @@ public class Screening {
 	public Auditorium getAuditorium() {
 		return auditorium;
 	}
+	
 	public void setAuditorium(Auditorium auditorium) {
 		this.auditorium = auditorium;
 	}
@@ -52,10 +63,10 @@ public class Screening {
 	}
 	
 	@OneToMany(mappedBy = "screening")
-	public Reservation getReservation() {
+	public Set<Reservation> getReservation() {
 		return reservation;
 	}
-	public void setReservation(Reservation reservation) {
+	public void setReservation(Set<Reservation> reservation) {
 		this.reservation = reservation;
 	}
 

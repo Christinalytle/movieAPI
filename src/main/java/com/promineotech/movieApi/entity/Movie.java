@@ -1,5 +1,7 @@
 package com.promineotech.movieApi.entity;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +18,7 @@ public class Movie {
 	private String description;
 	
 	@JsonIgnore 
-	private Screening screenings; 
+	private Set<Screening> screenings; 
 	
 
 	@Id
@@ -46,11 +48,11 @@ public class Movie {
 	}
 
 	@OneToMany(mappedBy = "movie")
-	public Screening getScreenings() {
+	public Set<Screening> getScreenings() {
 		return screenings;
 	}
 
-	public void setScreenings(Screening screenings) {
+	public void setScreenings(Set<Screening> screenings) {
 		this.screenings = screenings;
 	}
 
