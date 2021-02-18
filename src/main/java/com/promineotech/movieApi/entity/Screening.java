@@ -19,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Screening {
 	
 	private Long screeningId; 
-	private Movie movie; 
-	private Auditorium auditorium; 
+	private Movie movies; 
+	private Auditorium auditoriums; 
 	private String time; 
 	
 	@JsonIgnore
-	private Set<Reservation> reservation; 
+	private Set<Reservation> reservations; 
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,21 +38,21 @@ public class Screening {
 	@ManyToOne
 	@JoinColumn(name = "movieId")
 	public Movie getMovie() {
-		return movie;
+		return movies;
 	}
 	
-	public void setMovie(Movie movie) {
-		this.movie = movie;
+	public void setMovie(Movie movies) {
+		this.movies = movies;
 	}
 	
 	@ManyToOne
 	@JoinColumn(name = "auditoriumId")
 	public Auditorium getAuditorium() {
-		return auditorium;
+		return auditoriums;
 	}
 	
-	public void setAuditorium(Auditorium auditorium) {
-		this.auditorium = auditorium;
+	public void setAuditorium(Auditorium auditoriums) {
+		this.auditoriums = auditoriums;
 	}
 	
 	public String getTime() {
@@ -64,10 +64,10 @@ public class Screening {
 	
 	@OneToMany(mappedBy = "screening")
 	public Set<Reservation> getReservation() {
-		return reservation;
+		return reservations;
 	}
-	public void setReservation(Set<Reservation> reservation) {
-		this.reservation = reservation;
+	public void setReservation(Set<Reservation> reservations) {
+		this.reservations = reservations;
 	}
 
 }

@@ -38,7 +38,7 @@ public class Reservation {
 		this.screenings = screenings;
 	}
 	
-	@ManyToMany(mappedBy = "seats")
+	@ManyToMany(mappedBy = "reservations")
 	public Set<Seat> getSeats() {
 		return seats;
 	}

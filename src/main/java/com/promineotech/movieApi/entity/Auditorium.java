@@ -22,7 +22,7 @@ public class Auditorium {
 	@JsonIgnore
 	private Set<Screening> screenings;  
 	
-	
+	//Primary Key
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getAuditoriumId() {
@@ -41,6 +41,7 @@ public class Auditorium {
 		this.auditoriumNumber = auditoriumNumber;
 	}
 
+	//Foreign Key - to seat_id
 	@OneToMany (mappedBy = "auditorium")
 	public Set<Seat> getSeats() {
 		return seats;
@@ -50,12 +51,13 @@ public class Auditorium {
 		this.seats = seats;
 	}
 
+	//Foreign Key - to screening_id 
 	@OneToMany (mappedBy = "auditorium")
 	public Set<Screening> getScreenings() {
 		return screenings;
 	}
 
-	public void setScreengings(Set<Screening> screenings) {
+	public void setScreenings(Set<Screening> screenings) {
 		this.screenings = screenings;
 	}
 	
