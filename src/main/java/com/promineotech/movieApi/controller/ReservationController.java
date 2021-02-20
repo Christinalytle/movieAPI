@@ -22,9 +22,9 @@ public class ReservationController {
 	private ReservationService service; 
 	
 	@RequestMapping (method = RequestMethod.POST)
-	public ResponseEntity<Object> createReservation(@RequestBody Screening screeningId, @PathVariable Set<Long> seatIds, @PathVariable Long customerId ) {
+	public ResponseEntity<Object> createReservation(@RequestBody Set<Long> seatIds, @PathVariable Long id ) {
 		try {
-			return new ResponseEntity<Object>(service.createReservation(screeningId, seatIds, customerId), HttpStatus.OK); 
+			return new ResponseEntity<Object>(service.createReservation(seatIds, id), HttpStatus.CREATED); 
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(service.getReservation(), HttpStatus.BAD_REQUEST); 
 			

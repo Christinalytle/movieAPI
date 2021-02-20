@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.support.Repositories;
+
 import org.springframework.stereotype.Service;
 
 import com.promineotech.movieApi.entity.Customer;
@@ -33,14 +33,15 @@ public class ReservationService {
 	@Autowired 
 	private CustomerRepository customerRepo;
 	
+	
 	public Iterable<Reservation> getReservation() {
 		return resRepo.findAll(); 
 	}
 	
-	public Reservation createReservation (Screening screeningId, Set<Long> seatIds, Long customerId) throws Exception {
+	public Reservation createReservation (Set<Long> seatIds, Long customerId) throws Exception {
 		try {
 			Customer customer = customerRepo.findById(customerId).orElseThrow(); 
-			Reservation reservation = startReservation(seatIds, screeningId, customer); 
+			Reservation reservation = startReservation(seatIds, customer); 
 			return resRepo.save(reservation); 
 		} catch (Exception e) {
 			//logger 
@@ -49,11 +50,11 @@ public class ReservationService {
 		
 	}
 
-	private Reservation startReservation(Set<Long> seatIds, Screening screeningId, Customer customer) {
+	private Reservation startReservation(Set<Long> seatIds, Customer customer) {
 		Reservation reservation = new Reservation(); 
 		reservation.setCustomer(customer);
 		reservation.setSeats(convertToSeatSet(seatRepo.findAllById(seatIds)));
-		reservation.setScreening(screeningId);
+	//	reservation.setScreening(screeningId);
 		reservation.setReservationAmount(calculateReservationTotal(reservation.getSeats()));
 		addSeatsToReservation(reservation); 
 		
