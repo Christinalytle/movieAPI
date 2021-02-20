@@ -23,8 +23,8 @@ public class Screening {
 	private Auditorium auditoriums; 
 	private String time; 
 	
-//	@JsonIgnore
-//	private Set<Reservation> reservations; 
+	@JsonIgnore
+	private Set<Reservation> reservations; 
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -62,12 +62,13 @@ public class Screening {
 		this.time = time;
 	}
 	
-//	@OneToMany(mappedBy = "screening")
-//	public Set<Reservation> getReservation() {
-	//	return reservations;
-//	}
-//	public void setReservation(Set<Reservation> reservations) {
-//		this.reservations = reservations;
-//	}
+	@OneToMany(mappedBy = "screening")
+	public Set<Reservation> getReservation() {
+		return reservations;
+	}
+	
+	public void setReservation(Set<Reservation> reservations) {
+		this.reservations = reservations;
+	}
 
 }

@@ -24,8 +24,8 @@ public class ReservationService {
 	@Autowired
 	private ReservationRepository resRepo; 
 	
-	//@Autowired
-	//private ScreeningRepository screeningRepo; 
+	@Autowired
+	private ScreeningRepository screeningRepo; 
 	
 	@Autowired
 	private SeatRepository seatRepo; 
@@ -54,7 +54,7 @@ public class ReservationService {
 		Reservation reservation = new Reservation(); 
 		reservation.setCustomer(customer);
 		reservation.setSeats(convertToSeatSet(seatRepo.findAllById(seatIds)));
-	//	reservation.setScreening(screeningId);
+		reservation.setScreening(reservation.getScreening()); 
 		reservation.setReservationAmount(calculateReservationTotal(reservation.getSeats()));
 		addSeatsToReservation(reservation); 
 		

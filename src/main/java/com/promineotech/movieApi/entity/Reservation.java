@@ -19,7 +19,7 @@ public class Reservation {
 	
 	private Long reservationId; 
 	private Customer customer; 
-//	private Screening screenings; 
+	private Screening screenings; 
 	private Set<Seat> seats;
 	private double reservationAmount; 
 	
@@ -33,14 +33,15 @@ public class Reservation {
 		this.reservationId = reservationId;
 	}
 	
-//	@ManyToOne
-//	@JoinColumn (name = "screeningId")
-//	public Screening getScreening() {
-//		return screenings;
-//	}
-//	public void setScreening(Screening screenings) {
-//		this.screenings = screenings;
-//	}
+	@ManyToOne
+	@JoinColumn (name = "screeningId")
+	public Screening getScreening() {
+		return screenings;
+	}
+
+	public void setScreening(Screening screenings) {
+		this.screenings = screenings;
+	}
 	
 	@ManyToMany(mappedBy = "reservations")
 	public Set<Seat> getSeats() {
