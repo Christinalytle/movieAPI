@@ -35,7 +35,7 @@ public class AuditoriumService {
 		}
 	}
 	
-	public void deleteMovie(Long id) throws Exception {
+	public void removieAuditorium(Long id) throws Exception {
 		try {
 			repo.deleteById(id);
 		} catch (Exception e) {

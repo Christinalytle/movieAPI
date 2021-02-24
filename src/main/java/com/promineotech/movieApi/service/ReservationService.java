@@ -42,39 +42,26 @@ public class ReservationService {
 		return resRepo.findAll(); 
 	}
 	
-	public Reservation createReservation (Set<Long> seatIds, Long customerId, Long screeningId) throws AuthenticationException {
-		try {
-			Customer customer = customerRepo.findById(customerId).orElseThrow(); 
-			Screening screening = screeningRepo.findById(screeningId).orElseThrow(); 
-			Reservation reservation = startReservation(seatIds, customer, screening); 
-			return resRepo.save(reservation); 
-		} catch (DataIntegrityViolationException e) {
-			Logger.error("Exception occured while trying to create a screening");  
-			throw new AuthenticationException("Seats not available"); 
-		}
-		
+	public Reservation createReservation (Reservation reservation, Long customerId) {
+		Customer customer = customerRepo.findById(customerId).orElseThrow(); 
+		reservation.setCustomer(customer);
+		reservation.setReservationAmount(calculateReservationTotal(reservation.getSeats()));
+		return resRepo.save(reservation);
 	}
 
-	private Reservation startReservation(Set<Long> seatIds, Customer customer, Screening screening) {
-		Reservation reservation = new Reservation(); 
+	public Reservation startReservation(Reservation reservation, Long customerId) {
+		Customer customer = customerRepo.findById(customerId).orElseThrow(); 
 		reservation.setCustomer(customer);
-		reservation.setSeats(convertToSeatSet(seatRepo.findAllById(seatIds)));
-		reservation.setScreening(screening); 
+		reservation.setScreening(reservation.getScreening()); 
+		reservation.setSeats(convertToSeatSet(reservation.getSeats())); 
 		reservation.setReservationAmount(calculateReservationTotal(reservation.getSeats()));
 		addSeatsToReservation(reservation); 
-
-		return reservation;
+		return resRepo.save(reservation); 
+		
 	}
 	
 //	public Reservation updateReservation()
 
-	private void addSeatsToReservation(Reservation reservation) {
-		Set<Seat> seats = reservation.getSeats(); 
-		for (Seat seat : seats) {
-			seat.getReservations().add(reservation); 
-		}
-	}
-	
 	private Set<Seat> convertToSeatSet(Iterable<Seat> iterable) {
 		Set<Seat> set = new HashSet<Seat>(); 
 		for (Seat seat : iterable) {
@@ -84,6 +71,12 @@ public class ReservationService {
 		return set; 
 	}
 	
+	private void addSeatsToReservation(Reservation reservation) {
+		Set<Seat> seats = reservation.getSeats(); 
+		for (Seat seat : seats) {
+			seat.getReservations().add(reservation); 
+		}
+	}
 
 	private double calculateReservationTotal(Set<Seat> seats) {
 		double total = 0; 
@@ -92,7 +85,8 @@ public class ReservationService {
 		}
 		return total; 
 	}
+
+}
 	
 	
 
-}

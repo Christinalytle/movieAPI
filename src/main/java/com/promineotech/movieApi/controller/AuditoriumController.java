@@ -41,7 +41,7 @@ public class AuditoriumController {
 	@RequestMapping (value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteAuditorium(@PathVariable Long id) {
 		try {
-			service.removeProduct(id);
+			service.removieAuditorium(id);
 			return new ResponseEntity<Object>("Successfully deleted product with id: " + id, HttpStatus.OK); 
 		} catch (Exception e) {
 			return new ResponseEntity<Object>("Unable to delete product.", HttpStatus.BAD_REQUEST); 
