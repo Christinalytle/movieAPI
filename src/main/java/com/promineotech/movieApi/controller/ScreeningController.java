@@ -26,24 +26,24 @@ public class ScreeningController {
 	@RequestMapping (method=RequestMethod.GET)
 	public ResponseEntity<Object> geScreenings() {
 		return new ResponseEntity<Object>(service.getScreenings(), HttpStatus.OK); 
-}
-
-@RequestMapping (method = RequestMethod.POST)
-public ResponseEntity<Object> createScreening(@RequestBody Screening screening) {
-	return new ResponseEntity<Object>(service.createScreening(screening), HttpStatus.CREATED); 
-}
-
-@RequestMapping(value = "/{id}",  method=RequestMethod.PUT)
-public ResponseEntity<Object> updateScreening(@RequestBody Screening screening, @PathVariable Long id) {
+		}
+	
+	@RequestMapping (method = RequestMethod.POST)
+	public ResponseEntity<Object> createScreening(@RequestBody Screening screening) {
+		return new ResponseEntity<Object>(service.createScreening(screening), HttpStatus.CREATED); 
+	}
+	
+	@RequestMapping(value = "/{id}",  method=RequestMethod.PUT)
+	public ResponseEntity<Object> updateScreening(@RequestBody Screening screening, @PathVariable Long id) {
 	try {
 		return new ResponseEntity<Object>(service.updateScreening(screening, id), HttpStatus.OK);
 	} catch (Exception e) {
 		return new ResponseEntity<Object>("Unable to update product.", HttpStatus.BAD_REQUEST); 
 	}
-}
+	}
 
-@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-public ResponseEntity<Object> deleteScreening (@PathVariable Long id) {
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Object> deleteScreening (@PathVariable Long id) {
 	try {
 		service.deleteScreening(id);
 		return new ResponseEntity<Object>("Successfully deleted screening with id: " + id, HttpStatus.OK); 

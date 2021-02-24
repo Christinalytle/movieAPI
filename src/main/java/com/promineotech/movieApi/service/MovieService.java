@@ -1,5 +1,7 @@
 package com.promineotech.movieApi.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,8 @@ import com.promineotech.movieApi.repository.MovieRepository;
 @Service
 public class MovieService {
 	
+	private static final Logger Logger = LogManager.getLogger(MovieService.class); 
+	
 	@Autowired 
 	private MovieRepository repo; 
 	
@@ -16,7 +20,7 @@ public class MovieService {
 		try {
 			return repo.findById(id).orElseThrow(); 
 		} catch (Exception e) {
-			//logger 
+			Logger.error("Exception occured while trying to find movie "+ id, e);
 			throw e; 
 		}
 	}
@@ -36,7 +40,7 @@ public class MovieService {
 			oldMovie.setName(movie.getName()); 
 			return repo.save(oldMovie); 
 		} catch (Exception e) {
-			///Logger
+			Logger.error("Exception occured while trying to update movie " + id, e);
 			throw new Exception ("Unable to update product."); 
 		}
 	}
@@ -45,7 +49,7 @@ public class MovieService {
 		try {
 			repo.deleteById(id);
 		} catch (Exception e) {
-			//logger
+			Logger.error("Exception occured while trying to delete movie "+id, e);
 			throw new Exception("Unable to delete product."); 
 		}
 	}

@@ -2,6 +2,7 @@ package com.promineotech.movieApi.entity;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -44,6 +45,7 @@ public class Reservation {
 	}
 	
 	@ManyToMany(mappedBy = "reservations")
+	@Column(unique=true)
 	public Set<Seat> getSeats() {
 		return seats;
 	}

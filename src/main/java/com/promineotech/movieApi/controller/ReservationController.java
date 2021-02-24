@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.promineotech.movieApi.service.ReservationService;
 
 @RestController 
-@RequestMapping("/customers/{id}/reservations")
+@RequestMapping("/customers/{customerId}/screenings/{screeningId}")
 public class ReservationController {
 	
 	@Autowired
 	private ReservationService service; 
 	
 	@RequestMapping (method = RequestMethod.POST)
-	public ResponseEntity<Object> createReservation(@RequestBody Set<Long> seatIds, @PathVariable Long id ) {
+	public ResponseEntity<Object> createReservation(@RequestBody Set<Long> seatIds, @PathVariable Long customerId, @PathVariable Long screeningId ) {
 		try {
-			return new ResponseEntity<Object>(service.createReservation(seatIds, id), HttpStatus.CREATED); 
+			return new ResponseEntity<Object>(service.createReservation(seatIds, customerId, screeningId), HttpStatus.CREATED); 
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(service.getReservation(), HttpStatus.BAD_REQUEST); 
 			

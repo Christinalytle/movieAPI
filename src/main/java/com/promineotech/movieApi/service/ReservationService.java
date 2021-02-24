@@ -3,8 +3,12 @@ package com.promineotech.movieApi.service;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.naming.AuthenticationException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.promineotech.movieApi.entity.Customer;
@@ -19,7 +23,7 @@ import com.promineotech.movieApi.repository.SeatRepository;
 @Service 
 public class ReservationService {
 	
-	//logger 
+	private static final Logger Logger = LogManager.getLogger(ReservationService.class); 
 	
 	@Autowired
 	private ReservationRepository resRepo; 
@@ -38,31 +42,39 @@ public class ReservationService {
 		return resRepo.findAll(); 
 	}
 	
-	public Reservation createReservation (Set<Long> seatIds, Long customerId) throws Exception {
+	public Reservation createReservation (Set<Long> seatIds, Long customerId, Long screeningId) throws AuthenticationException {
 		try {
 			Customer customer = customerRepo.findById(customerId).orElseThrow(); 
-			Reservation reservation = startReservation(seatIds, customer); 
+			Screening screening = screeningRepo.findById(screeningId).orElseThrow(); 
+			Reservation reservation = startReservation(seatIds, customer, screening); 
 			return resRepo.save(reservation); 
-		} catch (Exception e) {
-			//logger 
-			throw new Exception("Unable to update order."); 
+		} catch (DataIntegrityViolationException e) {
+			Logger.error("Exception occured while trying to create a screening");  
+			throw new AuthenticationException("Seats not available"); 
 		}
 		
 	}
 
-	private Reservation startReservation(Set<Long> seatIds, Customer customer) {
+	private Reservation startReservation(Set<Long> seatIds, Customer customer, Screening screening) {
 		Reservation reservation = new Reservation(); 
 		reservation.setCustomer(customer);
 		reservation.setSeats(convertToSeatSet(seatRepo.findAllById(seatIds)));
-		reservation.setScreening(reservation.getScreening()); 
+		reservation.setScreening(screening); 
 		reservation.setReservationAmount(calculateReservationTotal(reservation.getSeats()));
 		addSeatsToReservation(reservation); 
-		
+
 		return reservation;
 	}
 	
 //	public Reservation updateReservation()
 
+	private void addSeatsToReservation(Reservation reservation) {
+		Set<Seat> seats = reservation.getSeats(); 
+		for (Seat seat : seats) {
+			seat.getReservations().add(reservation); 
+		}
+	}
+	
 	private Set<Seat> convertToSeatSet(Iterable<Seat> iterable) {
 		Set<Seat> set = new HashSet<Seat>(); 
 		for (Seat seat : iterable) {
@@ -72,12 +84,6 @@ public class ReservationService {
 		return set; 
 	}
 	
-	private void addSeatsToReservation(Reservation reservation) {
-		Set<Seat> seats = reservation.getSeats(); 
-		for (Seat seat : seats) {
-			seat.getReservations().add(reservation); 
-		}
-	}
 
 	private double calculateReservationTotal(Set<Seat> seats) {
 		double total = 0; 
@@ -86,5 +92,7 @@ public class ReservationService {
 		}
 		return total; 
 	}
+	
+	
 
 }

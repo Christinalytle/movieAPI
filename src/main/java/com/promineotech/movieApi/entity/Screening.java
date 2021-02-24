@@ -5,6 +5,7 @@ package com.promineotech.movieApi.entity;
 
 import java.util.Set;
 
+
 import javax.persistence.Entity;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
@@ -35,6 +36,7 @@ public class Screening {
 		this.screeningId = screeningId;
 	}
 	
+
 	@ManyToOne
 	@JoinColumn(name = "movieId")
 	public Movie getMovie() {
