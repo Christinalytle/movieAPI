@@ -41,7 +41,7 @@ public class Auditorium {
 		this.auditoriumNumber = auditoriumNumber;
 	}
 
-	//Foreign Key - to seat_id
+	//Foreign Key is seatId
 	@OneToMany (mappedBy = "auditorium")
 	public Set<Seat> getSeats() {
 		return seats;
@@ -51,7 +51,7 @@ public class Auditorium {
 		this.seats = seats;
 	}
 
-	//Foreign Key - to screening_id 
+	//Foreign Key is screeningId
 	@OneToMany (mappedBy = "auditorium")
 	public Set<Screening> getScreenings() {
 		return screenings;

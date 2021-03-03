@@ -13,10 +13,11 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "client", "clientMatter"})
 public class Reservation {
 	
-	 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "client", "clientMatter"})
 	
 	private Long reservationId; 
 	private Customer customer; 
@@ -24,7 +25,7 @@ public class Reservation {
 	private Set<Seat> seats;
 	private double reservationAmount; 
 	
-	
+	//Primary Key
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getReservationId() {
@@ -34,6 +35,7 @@ public class Reservation {
 		this.reservationId = reservationId;
 	}
 	
+	//Foreign Key screeningId
 	@ManyToOne
 	@JoinColumn (name = "screeningId")
 	public Screening getScreening() {
@@ -44,6 +46,7 @@ public class Reservation {
 		this.screenings = screenings;
 	}
 	
+	//Foreign Key a set of seatIds
 	@ManyToMany(mappedBy = "reservations")
 	@Column(unique=true)
 	public Set<Seat> getSeats() {
@@ -52,6 +55,7 @@ public class Reservation {
 	public void setSeats(Set<Seat> seats) {
 		this.seats = seats;
 	}
+	
 	public double getReservationAmount() {
 		return reservationAmount;
 	}
@@ -59,6 +63,7 @@ public class Reservation {
 		this.reservationAmount = reservationAmount;
 	}
 	
+	//Foreign key customerId
 	@ManyToOne
 	@JoinColumn(name = "customerId")
 	public Customer getCustomer() {

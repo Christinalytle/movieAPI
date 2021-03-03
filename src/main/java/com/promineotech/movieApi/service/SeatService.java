@@ -16,14 +16,18 @@ public class SeatService {
 	@Autowired 
 	private SeatRepository repo; 
 	
+	
+	//GET all seats
 	public Iterable<Seat> getSeats() {
 		return repo.findAll(); 
 	}
 	
+	//POST (create) a seat
 	public Seat createSeat(Seat seat)	{
 		return repo.save(seat); 
 	}
 	
+	//PUT (update) a seat by its id
 	public Seat updateSeat (Seat seat, Long id ) throws Exception {
 		try {
 			Seat oldSeat = repo.findById(id).orElseThrow(); 
@@ -37,7 +41,8 @@ public class SeatService {
 		}
 	}
 	
-	public void removeSeat (Long id) throws Exception {
+	//DELETE a seat by its id
+	public void deleteSeat (Long id) throws Exception {
 		try {
 			repo.deleteById(id);
 		} catch (Exception e) {

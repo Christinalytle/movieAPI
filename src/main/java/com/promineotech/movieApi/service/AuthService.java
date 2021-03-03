@@ -17,6 +17,8 @@ public class AuthService {
 	@Autowired
 	private CustomerRepository customerRepo; 
 	
+	
+	//POST (create) a new customer
 	public Customer register(Credentials cred) throws AuthenticationException {
 		Customer customer = new Customer(); 
 		customer.setEmail(cred.getEmail()); 
@@ -30,12 +32,13 @@ public class AuthService {
 		
 	}
 	
+	//POST (login) login a customer 
 	public Customer login (Credentials cred) throws AuthenticationException {
 		Customer foundCustomer = customerRepo.findByEmail(cred.getEmail());  
 		if (foundCustomer != null && BCrypt.checkpw(cred.getPassword(), foundCustomer.getHash())) {
 			return foundCustomer; 
 		}
-		throw new AuthenticationException("Incorrect username and password"); 
+		throw new AuthenticationException("Incorrect username or password"); 
 	}
 	
 	

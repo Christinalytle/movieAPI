@@ -16,6 +16,7 @@ public class MovieService {
 	@Autowired 
 	private MovieRepository repo; 
 	
+	//GET (find) a movie by its id
 	public Movie getMovieById (Long id) throws Exception {
 		try {
 			return repo.findById(id).orElseThrow(); 
@@ -25,14 +26,17 @@ public class MovieService {
 		}
 	}
 	
+	//POST (create) a movie
 	public Movie createMovie (Movie movie) {
 		return repo.save(movie); 	
 	}
 	
+	//GET all movies 
 	public Iterable<Movie> getMovies() {
 		return repo.findAll();  
 	}
 	
+	//PUT (update) a movie by its id 
 	public Movie updateMovie (Movie movie, Long id) throws Exception {
 		try {
 			Movie oldMovie = repo.findById(id).orElseThrow(); 
@@ -45,6 +49,7 @@ public class MovieService {
 		}
 	}
 	
+	//DELETE a movie by its id
 	public void deleteMovie(Long id) throws Exception {
 		try {
 			repo.deleteById(id);

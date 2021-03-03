@@ -13,10 +13,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Movie {
 
-	private Long movieId; 
+	private Long movieId; //primary key
 	private String name; 
 	private String description;
 	
+	//Screenings can have many movies 
 	@JsonIgnore 
 	private Set<Screening> screenings; 
 	
@@ -47,6 +48,7 @@ public class Movie {
 		this.description = description;
 	}
 
+	//Foreign key screeningId 
 	@OneToMany(mappedBy = "movie")
 	public Set<Screening> getScreenings() {
 		return screenings;

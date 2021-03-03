@@ -16,15 +16,18 @@ public class AuditoriumService {
 	@Autowired
 	private AuditoriumRepository repo; 
 	
+	//GET all auditoriums 
 	public Iterable<Auditorium> getAuditoriums(){
 		return repo.findAll(); 
 	}
 	
+	//POST (create) an auditorium
 	public Auditorium createAuditorium (Auditorium auditorium) {
 		return repo.save(auditorium); 
 	}
 	
-	public Auditorium updatAuditorium (Auditorium auditorium, Long id) throws Exception {
+	//PUT (update) an auditorium
+	public Auditorium updateAuditorium (Auditorium auditorium, Long id) throws Exception {
 		try {
 			Auditorium oldAuditorium = repo.findById(id).orElseThrow();
 			oldAuditorium.setAuditoriumNumber(auditorium.getAuditoriumNumber());
@@ -35,7 +38,8 @@ public class AuditoriumService {
 		}
 	}
 	
-	public void removieAuditorium(Long id) throws Exception {
+	//DELETE an auditorium
+	public void deleteAuditorium(Long id) throws Exception {
 		try {
 			repo.deleteById(id);
 		} catch (Exception e) {

@@ -8,6 +8,7 @@ public class ScreeningDto {
 	private String time;
 	  
 	
+	//The DTO is used to input variables in PostMan so they can connect to the right object 
 	
 	public Long getAuditoriumId() {
 		return auditoriumId;
@@ -15,17 +16,21 @@ public class ScreeningDto {
 	public void setAuditoriumId(Long auditoriumId) {
 		this.auditoriumId = auditoriumId;
 	}
-	public String getTime() {
-		return time;
-	}
-	public void setTime(String time) {
-		this.time = time;
-	}
+	
+	
 	public Long getMovieId() {
 		return movieId;
 	}
 	public void setMovieId(Long movieId) {
 		this.movieId = movieId;
+	}
+	
+	
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
 	}
 
 }

@@ -1,8 +1,5 @@
 package com.promineotech.movieApi.entity;
 
-
-
-
 import java.util.Set;
 
 
@@ -27,6 +24,7 @@ public class Screening {
 	@JsonIgnore
 	private Set<Reservation> reservations; 
 	
+	//Primary Key
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getScreeningId() {
@@ -37,6 +35,7 @@ public class Screening {
 	}
 	
 
+	//Foreign Key movieId
 	@ManyToOne
 	@JoinColumn(name = "movieId")
 	public Movie getMovie() {
@@ -47,6 +46,7 @@ public class Screening {
 		this.movies = movies;
 	}
 	
+	//Foreign Key auditoriumId
 	@ManyToOne
 	@JoinColumn(name = "auditoriumId")
 	public Auditorium getAuditorium() {
@@ -64,6 +64,7 @@ public class Screening {
 		this.time = time;
 	}
 	
+	//A reservation can have many screenings 
 	@OneToMany(mappedBy = "screening")
 	public Set<Reservation> getReservation() {
 		return reservations;
@@ -72,5 +73,6 @@ public class Screening {
 	public void setReservation(Set<Reservation> reservations) {
 		this.reservations = reservations;
 	}
+	
 
 }

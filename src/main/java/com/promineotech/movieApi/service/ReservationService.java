@@ -38,45 +38,65 @@ public class ReservationService {
 	private CustomerRepository customerRepo;
 	
 	
+	//GET all reservations 
 	public Iterable<Reservation> getReservation() {
 		return resRepo.findAll(); 
 	}
 	
-	public Reservation createReservation (Reservation reservation, Long customerId) {
-		Customer customer = customerRepo.findById(customerId).orElseThrow(); 
-		reservation.setCustomer(customer);
-		reservation.setReservationAmount(calculateReservationTotal(reservation.getSeats()));
-		return resRepo.save(reservation);
+	//GET reservation by its id
+	public Reservation getReservation (Long id) {
+		return resRepo.findById(id).orElseThrow(); 
 	}
 
-	public Reservation startReservation(Reservation reservation, Long customerId) {
-		Customer customer = customerRepo.findById(customerId).orElseThrow(); 
-		reservation.setCustomer(customer);
-		reservation.setScreening(reservation.getScreening()); 
-		reservation.setSeats(convertToSeatSet(reservation.getSeats())); 
-		reservation.setReservationAmount(calculateReservationTotal(reservation.getSeats()));
-		addSeatsToReservation(reservation); 
-		return resRepo.save(reservation); 
-		
-	}
-	
-//	public Reservation updateReservation()
-
-	private Set<Seat> convertToSeatSet(Iterable<Seat> iterable) {
-		Set<Seat> set = new HashSet<Seat>(); 
-		for (Seat seat : iterable) {
-			set.add(seat); 
+	//POST (create) a reservation. 
+	//Find the screening number and seat numbers 
+	//Find the customerId from the URL
+	//Get the total amount by looping thru the seats and adding their prices together 
+	//Add the seats to the reservation to satisfy the ManyToMany table 
+	//Save the reservation 
+	public Reservation startReservation(Set<Long> seatIds, Long screeningId , Long customerId) throws AuthenticationException {
+		try {
+			Reservation reservation = new Reservation(); 
+			Screening screen = screeningRepo.findById(screeningId).orElseThrow(); 
+			Customer customer = customerRepo.findById(customerId).orElseThrow();
+			reservation.setSeats(convertToSeatSet(seatRepo.findAllById(seatIds)));
+			reservation.setScreening(screen);
+			reservation.setCustomer(customer);
+			reservation.setReservationAmount(calculateReservationTotal(reservation.getSeats()));
+			addSeatsToReservation(reservation); 
+			return resRepo.save(reservation); 
+		} catch (DataIntegrityViolationException e) {
+			Logger.error("Exception occured while trying to create a screening");  
+			throw new AuthenticationException("Seats not available"); 
 		}
-		
-		return set; 
 	}
 	
+	//Delete the reservation 
+	public void deleteReservation (Long reservationId) throws Exception {
+		try {
+			resRepo.deleteById(reservationId);			
+		} catch (Exception e) {
+			Logger.error("Exception occured while trying to delete reservation: " + reservationId, e); 
+			throw new Exception("Unable to delete reservation."); 
+		}
+	}
+	
+
 	private void addSeatsToReservation(Reservation reservation) {
 		Set<Seat> seats = reservation.getSeats(); 
 		for (Seat seat : seats) {
 			seat.getReservations().add(reservation); 
 		}
 	}
+	
+	private Set<Seat> convertToSeatSet(Iterable<Seat> iterable) {
+		Set<Seat> set = new HashSet<Seat>(); 
+		for (Seat seat : iterable) {
+			set.add(seat); 
+		}
+		return set; 
+	}
+	
 
 	private double calculateReservationTotal(Set<Seat> seats) {
 		double total = 0; 
@@ -85,8 +105,8 @@ public class ReservationService {
 		}
 		return total; 
 	}
+	
+	
+	
 
 }
-	
-	
-

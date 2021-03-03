@@ -2,7 +2,7 @@ package com.promineotech.movieApi.entity;
 
 import java.util.Set;
 
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
 
 
 @Entity
@@ -25,8 +23,7 @@ public class Customer {
 	@JsonIgnore
 	private Set<Reservation> reservation; 
 	
-		
-		
+	//Primary Key
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getCustomerId() {
@@ -37,6 +34,8 @@ public class Customer {
 		this.customerId = customerId;
 	} 
 	
+	//Hash = password 
+	@Column(name="Password")
 	public String getHash() {
 			return hash;
 		}
@@ -53,6 +52,7 @@ public class Customer {
 			this.email = email;
 		}
 
+	//Foreign Key to reservationId
 	@OneToMany(mappedBy = "customer")
 	public Set<Reservation> getReservation() {
 		return reservation;

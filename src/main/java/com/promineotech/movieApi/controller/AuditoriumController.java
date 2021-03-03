@@ -32,7 +32,7 @@ public class AuditoriumController {
 	@RequestMapping (value="/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Object> updateAuditorium (@RequestBody Auditorium auditorium, @PathVariable Long id) {
 		try {
-			return new ResponseEntity<Object>(service.updatAuditorium(auditorium, id), HttpStatus.OK); 
+			return new ResponseEntity<Object>(service.updateAuditorium(auditorium, id), HttpStatus.OK); 
 		} catch (Exception e) {
 			return new ResponseEntity<Object>("Unable to update product.", HttpStatus.BAD_REQUEST); 
 		}
@@ -41,7 +41,7 @@ public class AuditoriumController {
 	@RequestMapping (value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteAuditorium(@PathVariable Long id) {
 		try {
-			service.removieAuditorium(id);
+			service.deleteAuditorium(id);
 			return new ResponseEntity<Object>("Successfully deleted product with id: " + id, HttpStatus.OK); 
 		} catch (Exception e) {
 			return new ResponseEntity<Object>("Unable to delete product.", HttpStatus.BAD_REQUEST); 

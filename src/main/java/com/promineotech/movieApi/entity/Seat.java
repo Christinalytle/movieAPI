@@ -25,6 +25,7 @@ public class Seat {
 	private Set<Reservation> reservations; 
 	
 	
+	//Primary Key
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getSeatId() {
@@ -33,12 +34,14 @@ public class Seat {
 	public void setSeatId(Long seatId) {
 		this.seatId = seatId;
 	}
+	
 	public Long getSeatNumber() {
 		return seatNumber;
 	}
 	public void setSeatNumber(Long seatNumber) {
 		this.seatNumber = seatNumber;
 	}
+	
 	public String getRowName() {
 		return rowName;
 	}
@@ -53,6 +56,7 @@ public class Seat {
 		this.seatPrice = seatPrice;
 	}
 	
+	//Foreign Key auditoriumID
 	@ManyToOne
 	@JoinColumn(name = "auditoriumId")
 	public Auditorium getAuditorium() {
@@ -61,6 +65,9 @@ public class Seat {
 	public void setAuditorium(Auditorium auditorium) {
 		this.auditorium = auditorium;
 	}
+	
+	/*This ManyToMany table is used to connect a set of seats to a reservation number. This will 
+	 * allow customers to pick a set of seats that will connect to their reservation ID. */
 	
 	@ManyToMany (cascade = CascadeType.ALL)
 	@JoinTable (name = "seats_reserved",

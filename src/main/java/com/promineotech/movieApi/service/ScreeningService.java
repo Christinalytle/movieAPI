@@ -1,6 +1,5 @@
 package com.promineotech.movieApi.service;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.promineotech.movieApi.entity.Auditorium;
 import com.promineotech.movieApi.entity.Movie;
-//import com.promineotech.movieApi.entity.Auditorium;
-//import com.promineotech.movieApi.entity.Movie;
 import com.promineotech.movieApi.entity.Screening;
-import com.promineotech.movieApi.entity.ScreeningDto;
 import com.promineotech.movieApi.repository.AuditoriumRepository;
 import com.promineotech.movieApi.repository.MovieRepository;
-//import com.promineotech.movieApi.entity.ScreeningDto;
-//import com.promineotech.movieApi.repository.AuditoriumRepository;
-//import com.promineotech.movieApi.repository.MovieRepository;
 import com.promineotech.movieApi.repository.ScreeningRepository;
 
 @Service 
@@ -28,11 +21,12 @@ public class ScreeningService {
 	private ScreeningRepository repo; 
 	
 	@Autowired 
-	private AuditoriumRepository auditoriumRepo; 
+	private AuditoriumRepository audRepo; 
 	
 	@Autowired
 	private MovieRepository movieRepo; 
 	
+	//GET a screening by its Id
 	public Screening getScreeningById (Long id) throws Exception {
 		try {
 			return repo.findById(id).orElseThrow(); 
@@ -42,14 +36,25 @@ public class ScreeningService {
 		}
 	}
 	
-	public Screening createScreening (Screening screening) {
-		return repo.save(screening); 
-	}
-	
+	//GET all screenings 
 	public Iterable<Screening> getScreenings() {
 		return repo.findAll(); 
 	}
 	
+	//POST (create) a screening by finding the auditorium and movie ID, and saving 
+	//it to the reservation while adding a time. 
+	public Screening createScreening (Long auditoriumId, Long movieId, String time) {
+		Screening screening = new Screening(); 
+		Auditorium aud = audRepo.findById(auditoriumId).orElseThrow(); 
+		Movie mov = movieRepo.findById(movieId).orElseThrow(); 
+		screening.setAuditorium(aud);
+		screening.setMovie(mov);
+		screening.setTime(time);
+		return repo.save(screening); 
+	}
+	
+	
+	//PUT (update) a screening by its id
 	public Screening updateScreening (Screening screening, Long id) throws Exception {
 		try {
 			Screening oldScreening = repo.findById(id).orElseThrow(); 
@@ -62,7 +67,8 @@ public class ScreeningService {
 			throw new Exception ("Unable to update product.");
 		}
 	}
-		
+	
+	//DELETE a screening by its id 
 	public void deleteScreening (Long id) throws Exception {
 			try {
 				repo.deleteById(id);
@@ -73,14 +79,7 @@ public class ScreeningService {
 		}
 	
 	
-	//public ScreeningDto createScreening (ScreeningDto screeningDto) {
-	//	Movie movieId = movieRepo.findById(screeningDto.getMovieId()).orElseThrow(); 
-	//	Auditorium auditoriumId = auditoriumRepo.findById(screeningDto.getAuditoriumId()).orElseThrow(); 
-	//	screeningDto.setAuditoriumId(auditoriumId);
-	//	screeningDto.setMovieId(movieId);
-	//	screeningDto.setTime(time); 
-	//}
-	
+
 }
 
 

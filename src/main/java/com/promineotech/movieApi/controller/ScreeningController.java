@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.promineotech.movieApi.entity.Screening;
+import com.promineotech.movieApi.entity.ScreeningDto;
 import com.promineotech.movieApi.service.ScreeningService;
 
 
@@ -29,8 +30,8 @@ public class ScreeningController {
 		}
 	
 	@RequestMapping (method = RequestMethod.POST)
-	public ResponseEntity<Object> createScreening(@RequestBody Screening screening) {
-		return new ResponseEntity<Object>(service.createScreening(screening), HttpStatus.CREATED); 
+	public ResponseEntity<Object> createScreening(@RequestBody ScreeningDto screeningDto) {
+		return new ResponseEntity<Object>(service.createScreening(screeningDto.getAuditoriumId(), screeningDto.getMovieId(), screeningDto.getTime()), HttpStatus.CREATED); 
 	}
 	
 	@RequestMapping(value = "/{id}",  method=RequestMethod.PUT)
