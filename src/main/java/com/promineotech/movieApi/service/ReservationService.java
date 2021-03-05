@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+
 import com.promineotech.movieApi.entity.Customer;
 import com.promineotech.movieApi.entity.Reservation;
+import com.promineotech.movieApi.entity.ReservationResponse;
 import com.promineotech.movieApi.entity.Screening;
 import com.promineotech.movieApi.entity.Seat;
+import com.promineotech.movieApi.entity.SeatResponse;
 import com.promineotech.movieApi.repository.CustomerRepository;
 import com.promineotech.movieApi.repository.ReservationRepository;
 import com.promineotech.movieApi.repository.ScreeningRepository;
@@ -54,7 +57,9 @@ public class ReservationService {
 	//Get the total amount by looping thru the seats and adding their prices together 
 	//Add the seats to the reservation to satisfy the ManyToMany table 
 	//Save the reservation 
-	public Reservation startReservation(Set<Long> seatIds, Long screeningId , Long customerId) throws AuthenticationException {
+	//Convert reservation to a ReservationResponse (to keep it from doing an infinite recursion) 
+	//Return a ResrvationResponse 
+	public ReservationResponse startReservation(Set<Long> seatIds, Long screeningId , Long customerId) throws AuthenticationException {
 		try {
 			Reservation reservation = new Reservation(); 
 			Screening screen = screeningRepo.findById(screeningId).orElseThrow(); 
@@ -63,8 +68,9 @@ public class ReservationService {
 			reservation.setScreening(screen);
 			reservation.setCustomer(customer);
 			reservation.setReservationAmount(calculateReservationTotal(reservation.getSeats()));
-			addSeatsToReservation(reservation); 
-			return resRepo.save(reservation); 
+			addSeatsToReservation(reservation);
+			resRepo.save(reservation); 
+			return convertToReservationResponse(reservation);
 		} catch (DataIntegrityViolationException e) {
 			Logger.error("Exception occured while trying to create a screening");  
 			throw new AuthenticationException("Seats not available"); 
@@ -73,15 +79,37 @@ public class ReservationService {
 	
 	//Delete the reservation 
 	public void deleteReservation (Long reservationId) throws Exception {
-		try {
-			resRepo.deleteById(reservationId);			
-		} catch (Exception e) {
-			Logger.error("Exception occured while trying to delete reservation: " + reservationId, e); 
-			throw new Exception("Unable to delete reservation."); 
+			try {
+				resRepo.deleteById(reservationId);			
+			} catch (Exception e) {
+				Logger.error("Exception occured while trying to delete reservation: " + reservationId, e); 
+				throw new Exception("Unable to delete reservation."); 
+			}
 		}
+	
+	private ReservationResponse convertToReservationResponse(Reservation reservation) {
+		ReservationResponse response = new ReservationResponse();
+		Set<Seat> seats = reservation.getSeats();
+		response.setReservationId(reservation.getReservationId());
+		response.setCustomerEmail(reservation.getCustomer().getEmail());
+		response.setPrice(calculateReservationTotal(reservation.getSeats()));
+		response.setScreeningId(reservation.getScreening().getScreeningId());
+		response.setSeats(convertToSeatResponse(seats));
+		return response;
 	}
 	
-
+	private Set<SeatResponse> convertToSeatResponse(Set<Seat> seats) {
+		Set<SeatResponse> seatList = new HashSet<SeatResponse>();
+		for(Seat seat : seats) {
+			SeatResponse response = new SeatResponse();
+			response.setRowName(seat.getRowName());
+			response.setSeatNumber(seat.getSeatNumber());
+			response.setSeatPrice(seat.getSeatPrice());
+			seatList.add(response);
+		}
+		return seatList;
+	}
+	
 	private void addSeatsToReservation(Reservation reservation) {
 		Set<Seat> seats = reservation.getSeats(); 
 		for (Seat seat : seats) {
@@ -97,7 +125,6 @@ public class ReservationService {
 		return set; 
 	}
 	
-
 	private double calculateReservationTotal(Set<Seat> seats) {
 		double total = 0; 
 		for (Seat seat : seats) {
@@ -105,8 +132,4 @@ public class ReservationService {
 		}
 		return total; 
 	}
-	
-	
-	
-
 }

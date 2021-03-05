@@ -60,10 +60,5 @@ public class Auditorium {
 	public void setScreenings(Set<Screening> screenings) {
 		this.screenings = screenings;
 	}
-	
-	
-	
-
-	 
 
 }

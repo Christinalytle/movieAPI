@@ -2,8 +2,8 @@ package com.promineotech.movieApi.entity;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 public class Seat {
@@ -22,6 +27,7 @@ public class Seat {
 	
 	private Auditorium auditorium;
 	
+	@JsonIgnore
 	private Set<Reservation> reservations; 
 	
 	
@@ -69,7 +75,9 @@ public class Seat {
 	/*This ManyToMany table is used to connect a set of seats to a reservation number. This will 
 	 * allow customers to pick a set of seats that will connect to their reservation ID. */
 	
-	@ManyToMany (cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "client", "clientMatter"})
+	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+	@ManyToMany (fetch = FetchType.LAZY)
 	@JoinTable (name = "seats_reserved",
 				joinColumns = @JoinColumn(name = "seatId", referencedColumnName="seatId"), 
 				inverseJoinColumns = @JoinColumn(name = "reservationId", referencedColumnName ="reservationId"))

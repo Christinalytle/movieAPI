@@ -2,7 +2,6 @@ package com.promineotech.movieApi.entity;
 
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,18 +10,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "client", "clientMatter"})
 public class Reservation {
 	
 	
 	private Long reservationId; 
+	
+	
 	private Customer customer; 
+	
+	
 	private Screening screenings; 
+	
+	
 	private Set<Seat> seats;
+	
 	private double reservationAmount; 
 	
 	//Primary Key
@@ -37,7 +40,7 @@ public class Reservation {
 	
 	//Foreign Key screeningId
 	@ManyToOne
-	@JoinColumn (name = "screeningId")
+	@JoinColumn (name = "screeningId") 
 	public Screening getScreening() {
 		return screenings;
 	}
@@ -48,7 +51,6 @@ public class Reservation {
 	
 	//Foreign Key a set of seatIds
 	@ManyToMany(mappedBy = "reservations")
-	@Column(unique=true)
 	public Set<Seat> getSeats() {
 		return seats;
 	}

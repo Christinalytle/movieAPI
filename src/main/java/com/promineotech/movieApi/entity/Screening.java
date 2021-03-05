@@ -9,9 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Id; 
-import javax.persistence.GeneratedValue; 
+import javax.persistence.GeneratedValue;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class Screening {
@@ -21,7 +22,7 @@ public class Screening {
 	private Auditorium auditoriums; 
 	private String time; 
 	
-	@JsonIgnore
+	@JsonIgnore 
 	private Set<Reservation> reservations; 
 	
 	//Primary Key

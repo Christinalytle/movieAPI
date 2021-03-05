@@ -20,7 +20,7 @@ public class ReservationController {
 	private ReservationService service; 
 	
 	@RequestMapping (method = RequestMethod.POST)
-	public ResponseEntity<Object> createReservation(@RequestBody ReservationDto res, @PathVariable Long customerId){
+	public ResponseEntity<Object> startReservation(@RequestBody ReservationDto res, @PathVariable Long customerId){
 		try {	
 				return new ResponseEntity<Object>(service.startReservation(res.getSeatIds(), res.getScreeningId(), customerId), 
 					HttpStatus.CREATED); 
